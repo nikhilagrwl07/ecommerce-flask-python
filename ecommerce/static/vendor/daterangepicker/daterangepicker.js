@@ -9,7 +9,7 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Make globaly available as well
-        define(['moment', 'jquery'], function (moment, jquery) {
+        define(['ecommerce/static/vendor/daterangepicker/moment', 'jquery'], function (moment, jquery) {
             if (!jquery.fn) jquery.fn = {}; // webpack server rendering
             return (root.daterangepicker = factory(moment, jquery));
         });
@@ -21,7 +21,7 @@
             jQuery = require('jquery');
             if (!jQuery.fn) jQuery.fn = {};
         }
-        var moment = (typeof window != 'undefined' && typeof window.moment != 'undefined') ? window.moment : require('moment');
+        var moment = (typeof window != 'undefined' && typeof window.moment != 'undefined') ? window.moment : require('ecommerce/static/vendor/daterangepicker/moment');
         module.exports = factory(moment, jQuery);
     } else {
         // Browser globals
