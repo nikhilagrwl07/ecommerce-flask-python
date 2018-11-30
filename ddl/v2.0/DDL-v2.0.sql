@@ -63,18 +63,6 @@ CREATE TABLE `cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE `sale_transaction` (
-  `transactionid` int(11) NOT NULL AUTO_INCREMENT,
-  `orderid` int(11) NOT NULL,
-  `transaction_date` date NOT NULL,
-  `amount` decimal(4,1) NOT NULL DEFAULT 0.00,
-  `cc_number` varchar(50) NOT NULL,
-  `cc_type` varchar(50) NOT NULL,
-  `response` varchar(50) NOT NULL,
-  PRIMARY KEY (`transactionid`),
-  CONSTRAINT `sale_transaction_ibfk_1` FOREIGN KEY (`orderid`) REFERENCES `order` (`orderid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
 CREATE TABLE `order` (
   `orderid` int(11) NOT NULL AUTO_INCREMENT,
   `order_date` date NOT NULL,
@@ -96,5 +84,14 @@ CREATE TABLE `ordered_product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 
-
-
+CREATE TABLE `sale_transaction` (
+  `transactionid` int(11) NOT NULL AUTO_INCREMENT,
+  `orderid` int(11) NOT NULL,
+  `transaction_date` date NOT NULL,
+  `amount` decimal(4,1) NOT NULL DEFAULT 0.00,
+  `cc_number` varchar(50) NOT NULL,
+  `cc_type` varchar(50) NOT NULL,
+  `response` varchar(50) NOT NULL,
+  PRIMARY KEY (`transactionid`),
+  CONSTRAINT `sale_transaction_ibfk_1` FOREIGN KEY (`orderid`) REFERENCES `order` (`orderid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
