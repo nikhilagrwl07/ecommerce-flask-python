@@ -97,6 +97,27 @@ def extractAndPersistUserDataFromForm(request):
     db.session.commit()
     return "Registered Successfully"
 
+def isUserLoggedIn():
+    if 'email' not in session:
+        return False
+    else:
+        return True
+
+def extractAndPersistKartDetails(productId):
+    userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
+    userId = userId[0]
+    kwargs = {'userid': userId, 'productid': productId}
+    quantity = Cart.query.with_entities(Cart.quantity).filter_by(**kwargs).first()
+
+    if quantity is not None:
+        cart = Cart(userid=userId, productid=productId, quantity=quantity[0]+1)
+    else:
+        cart = Cart(userid=userId, productid=productId, quantity=1)
+
+    db.session.merge(cart)
+    db.session.flush()
+    db.session.commit()
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',

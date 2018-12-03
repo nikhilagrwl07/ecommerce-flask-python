@@ -5,6 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort, ses
 from ecommerce import app, mysql
 from flask_login import login_user, current_user, logout_user, login_required
 from ecommerce.forms import *
+from ecommerce.models import *
 
 
 @app.route("/signIn")
@@ -47,7 +48,6 @@ def register():
         return render_template("login.html", error=msg)
 
 
-
 @app.route("/")
 @app.route("/home")
 def root():
@@ -61,19 +61,20 @@ def root():
                            categoryData=categoryData)
 
 
-# # Display all items of a category
 @app.route("/displayCategory")
 def displayCategory():
     loggedIn, firstName, noOfItems = getLoginUserDetails()
     categoryId = request.args.get("categoryId")
 
-    cur = mysql.connection.cursor()
-    cur.execute(
-        "SELECT product.productid, product.product_name, product.regular_price, product.image, category.category_name FROM product, category WHERE products.categoryId = categories.categoryId AND categories.categoryId = " + categoryId)
-    data = cur.fetchall()
-    cur.close()
-    categoryName = data[0]['categories.name']
-    data = massageItemData(data)
+    productDetailsByCategoryId = Product.query.join(ProductCategory, Product.productid == ProductCategory.productid) \
+                                    .add_columns(Product.productid, Product.product_name, Product.regular_price, Product.discounted_price, Product.image) \
+                                    .join(Category, Category.categoryid == ProductCategory.categoryid)\
+                                    .filter(Category.categoryid == int(categoryId))\
+                                    .add_columns(Category.category_name)\
+                                    .all()
+
+    categoryName = productDetailsByCategoryId[0].category_name
+    data = massageItemData(productDetailsByCategoryId)
     return render_template('displayCategory.html', data=data, loggedIn=loggedIn, firstName=firstName,
                            noOfItems=noOfItems, categoryName=categoryName)
 
@@ -81,8 +82,19 @@ def displayCategory():
 @app.route("/productDescription")
 def productDescription():
     loggedIn, firstName, noOfItems = getLoginUserDetails()
-    productid = request.args.get('productid')
+    productid = request.args.get('productId')
     productDetailsByProductId = getProductDetails(productid)
     return render_template("productDescription.html", data=productDetailsByProductId, loggedIn=loggedIn,
                            firstName=firstName,
                            noOfItems=noOfItems)
+
+
+@app.route("/addToCart")
+def addToCart():
+    if isUserLoggedIn():
+        productId = int(request.args.get('productId'))
+        extractAndPersistKartDetails(productId)
+        flash('Item successfully added to cart !!', 'success')
+        return redirect(url_for('root'))
+    else:
+        return redirect(url_for('loginForm'))

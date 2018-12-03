@@ -50,10 +50,10 @@ class Product(db.Model):
     product_review = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
-        return f"Product('{self.productid}', '{self.product_name}')"
+        return f"Product('{self.productid}','{self.product_name}','{self.description}', '{self.image}',  '{self.quantity}', '{self.regular_price}', '{self.discounted_price}')"
 
 
-class Product_Category(db.Model):
+class ProductCategory(db.Model):
     __table_args__ = {'extend_existing': True}
     categoryid = db.Column(db.Integer, db.ForeignKey('category.categoryid'), nullable=False,primary_key=True)
     productid = db.Column(db.Integer, db.ForeignKey('product.productid'), nullable=False,primary_key=True)
@@ -70,4 +70,4 @@ class Cart(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f"Cart('{self.userid}', '{self.productid}')"
+        return f"Cart('{self.userid}', '{self.productid}, '{self.quantity}')"

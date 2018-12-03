@@ -36,10 +36,10 @@
 </div>
 <div id="display">
 	<div id="productName">
-		<h1>{{data['name']}}</h1>
+		<h1>{{data.product_name}}</h1>
 	</div>
 	<div>
-		<img src={{url_for('static', filename='uploads/'+data['image']) }} id="productImage"/>
+		<img src={{url_for('static', filename='uploads/'+data.image) }} id="productImage"/>
 	</div>
 
 	<div id="productDescription">
@@ -47,15 +47,19 @@
 		<table id="descriptionTable">
 			<tr>
 				<td>Name</td>
-				<td>{{data['description']}}</td>
+				<td>{{data.description}}</td>
 			</tr>
 			<tr>
-				<td>Price</td>
-				<td>$ {{data['price']}}</td>
+				<td>Regular Price</td>
+				<td>$ {{data.regular_price}}</td>
+			</tr>
+            <tr>
+				<td>Discounted Price</td>
+				<td>$ {{data.discounted_price}}</td>
 			</tr>
 			<tr>
 				<td>Stock</td>
-				<td>{{data['stock']}}</td>
+				<td>{{data.quantity}}</td>
 			</tr>
 		</table>
 		<h2>Description</h2>

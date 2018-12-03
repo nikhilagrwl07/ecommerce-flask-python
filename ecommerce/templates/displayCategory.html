@@ -49,8 +49,8 @@
 		<tr id="productImage">
 			{% for row in itemData %}
 			<td>
-				<a href="/productDescription?productId={{row['productId']}}">
-					<img src={{ url_for('static', filename='uploads/' + row['image']) }} id="itemImage" />
+				<a href="/productDescription?productId={{row.productid}}">
+					<img src={{ url_for('static', filename='uploads/' + row.image) }} id="itemImage" />
 				</a>
 			</td>
 			{% endfor %}
@@ -58,7 +58,7 @@
 		<tr id="productPrice">
 			{% for row in itemData %}
 			<td>
-				$ {{row['price']}}
+				$ {{row.regular_price}}
 			</td>
 			{% endfor %}
 		</tr>

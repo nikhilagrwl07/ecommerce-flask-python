@@ -10,10 +10,10 @@ import logging
 
 
 ######### Enable this for debugging #########
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
-# SQLALCHEMY_TRACK_MODIFICATIONS = True
-######### Enable this for debugging #########
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+######## Enable this for debugging #########
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
