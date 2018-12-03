@@ -4,29 +4,29 @@ CREATE TABLE `user` (
   `lname` varchar(120) NOT NULL,
   `password` varchar(60) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
-  `created_on` datetime NOT NULL,
-  `address1` varchar(20) NOT NULL,
-  `address2` varchar(20) NOT NULL,
+  `address1` varchar(100) NOT NULL,
+  `address2` varchar(100) NOT NULL,
   `city` varchar(20) NOT NULL,
   `state` varchar(20) NOT NULL,
   `country` varchar(20) NOT NULL,
   `zipcode` varchar(20) NOT NULL,
   `email` varchar(120) NOT NULL,
   `phone` varchar(20) NOT NULL,
-  `image_file` varchar(20) NOT NULL,
+  `image_file` varchar(20) NOT NULL DEFAULT 'default.jpg',
   `isadmin` tinyint(1) NOT NULL DEFAULT '0',
+  `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`userid`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `category_name` varchar(100) NOT NULL,
-  `date_posted` datetime NOT NULL,
+  `date_posted` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`categoryid`),
   UNIQUE KEY `categoryName` (`category_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 
 
@@ -35,13 +35,14 @@ CREATE TABLE `product` (
   `sku` varchar(50) NOT NULL,
   `product_name` varchar(100) NOT NULL,
   `description` varchar(100) NOT NULL,
+  `image` text NOT NULL,
   `quantity` int(5) NOT NULL,
-  `regular_price` decimal(3,1) NOT NULL DEFAULT 0.00,
-  `discounted_price` decimal(3,1) NOT NULL DEFAULT 0.00,
-  `product_rating` decimal(3,1) NOT NULL DEFAULT 0.00,
-  `product_review` varchar(100),
+  `discounted_price` decimal(10,1) NOT NULL DEFAULT '0.0',
+  `regular_price` decimal(10,1) NOT NULL DEFAULT '0.0',
+  `product_rating` decimal(3,1) NOT NULL DEFAULT '0.0',
+  `product_review` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `product_category` (
   `categoryid` int(11) NOT NULL,
@@ -54,10 +55,11 @@ CREATE TABLE `product_category` (
 
 
 CREATE TABLE `cart` (
-  `userid`  int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   `quantity` int(5) NOT NULL,
-  PRIMARY KEY (`userId`,`productid`),
+  PRIMARY KEY (`userid`,`productid`),
+  KEY `cart_ibfk_2` (`productid`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`),
   CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`productid`) REFERENCES `product` (`productid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
