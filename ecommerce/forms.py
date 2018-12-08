@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, DateField, \
-    SelectField, HiddenField, RadioField
+    SelectField, HiddenField, RadioField, FloatField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ecommerce import db
@@ -97,11 +97,13 @@ def extractAndPersistUserDataFromForm(request):
     db.session.commit()
     return "Registered Successfully"
 
+
 def isUserLoggedIn():
     if 'email' not in session:
         return False
     else:
         return True
+
 
 def extractAndPersistKartDetails(productId):
     userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
@@ -110,10 +112,18 @@ def extractAndPersistKartDetails(productId):
     quantity = Cart.query.with_entities(Cart.quantity).filter_by(**kwargs).first()
 
     if quantity is not None:
-        cart = Cart(userid=userId, productid=productId, quantity=quantity[0]+1)
+        cart = Cart(userid=userId, productid=productId, quantity=quantity[0] + 1)
     else:
         cart = Cart(userid=userId, productid=productId, quantity=1)
 
     db.session.merge(cart)
     db.session.flush()
     db.session.commit()
+
+
+class addProductForm(FlaskForm):
+    sku = IntegerField('Product SKU', validators=[DataRequired()])
+    productName = StringField('Product Name', validators=[DataRequired()])
+    productDescription = TextAreaField('Product Description', validators=[DataRequired()])
+    productPrice = FloatField('Product Price', validators=[DataRequired()])
+    submit = SubmitField('Add Product')

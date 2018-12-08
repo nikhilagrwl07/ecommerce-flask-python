@@ -107,3 +107,11 @@ def profileHome():
         return render_template("profileHome.html", loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems)
     else:
         return redirect(url_for('root'))
+
+@app.route("/admin/addProduct", methods=['GET', 'POST'])
+def addProduct():
+    form = addProductForm()
+    if form.validate_on_submit():
+        flash(f'Product {form.productName}! added successfully', 'success')
+        return redirect(url_for('root'))
+    return render_template("addProduct.html", form=form)

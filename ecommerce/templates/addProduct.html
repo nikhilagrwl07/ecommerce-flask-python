@@ -1,0 +1,61 @@
+<form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.sku.label }}
+            {% if form.sku.errors %}
+                {{ form.sku(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.sku.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.sku}}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.productName.label }}
+            {% if form.productName.errors %}
+                {{ form.productName(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.productName.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.productName}}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.productDescription.label }}
+            {% if form.productDescription.errors %}
+                {{ form.productDescription(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.productDescription.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.productDescription}}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.productPrice.label }}
+            {% if form.productPrice.errors %}
+                {{ form.productPrice(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.productPrice.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.productPrice}}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+
+</form>
