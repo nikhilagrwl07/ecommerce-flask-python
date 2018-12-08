@@ -98,12 +98,3 @@ def addToCart():
         return redirect(url_for('root'))
     else:
         return redirect(url_for('loginForm'))
-
-
-@app.route("/account/profile")
-def profileHome():
-    if isUserLoggedIn():
-        loggedIn, firstName, noOfItems = getLoginUserDetails()
-        return render_template("profileHome.html", loggedIn=loggedIn, firstName=firstName, noOfItems=noOfItems)
-    else:
-        return redirect(url_for('root'))
