@@ -126,4 +126,5 @@ class addProductForm(FlaskForm):
     productName = StringField('Product Name', validators=[DataRequired()])
     productDescription = TextAreaField('Product Description', validators=[DataRequired()])
     productPrice = FloatField('Product Price', validators=[DataRequired()])
+    productQuantity = IntegerField('Product Quantity', validators=[DataRequired()])
     submit = SubmitField('Add Product')
