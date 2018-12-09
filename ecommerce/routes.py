@@ -127,3 +127,9 @@ def addProduct():
         flash(f'Product {form.productName}! added successfully', 'success')
         return redirect(url_for('root'))
     return render_template("addProduct.html", form=form)
+
+
+@app.route("/admin/product/<int:product_id>", methods=['GET', 'POST'])
+def product(product_id):
+    product = Product.query.get_or_404(product_id)
+    return render_template('adminEditProduct.html', product=product)
