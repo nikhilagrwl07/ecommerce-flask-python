@@ -3388,7 +3388,7 @@ TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT TEXT
 .l-text2 {
 	font-family: Montserrat-Bold;
 	font-size: 50px;
-	color: white;
+	color: grey;
 	line-height: 1.2;
 	text-transform: uppercase;
 }
@@ -3504,8 +3504,8 @@ SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE SHAPE
 }
 
 .size10 {
-	width: 176px;
-	height: 45px;
+	width: 270px;
+	height: 82px;
 }
 
 .size11 {

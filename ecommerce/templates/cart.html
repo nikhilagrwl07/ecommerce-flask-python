@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Cart</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/util.css') }} >
+	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/main.css') }}>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/home.css') }} />
+<link rel="stylesheet" href={{ url_for('static', filename='css/topStyle.css') }} />
+<!--===============================================================================================-->
+</head>
+
+<body style="background-color:antiquewhite">
+<div id="title">
+	<form>
+		<input id="searchBox" type="text" name="searchQuery">
+		<input id="searchButton" type="submit" value="Search">
+	</form>
+	{% if not loggedIn %}
+	<div id="signInButton">
+		<a class="link" href="/signIn">Sign In</a>
+	</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Hello, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Your orders</a>
+			<a href="/account/profile">Your profile</a>
+			<hr>
+			<a href="/logout">Sign Out</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+			<img src={{url_for('static', filename='images/shoppingCart.png')}} id="cartIcon" />
+			CART {{productCountinKartForGivenUser}}
+		</a>
+	</div>
+</div>
+
+	<!-- Title Page -->
+	<section class="bg-title-page p-t-40 p-b-50 flex-col-c-m" >
+		<h2 class="l-text2 t-center">
+			Cart
+		</h2>
+	</section>
+
+	<!-- Cart -->
+	<section class="cart bgwhite p-t-70 p-b-100">
+		<div class="container">
+			<!-- Cart item -->
+			<div class="container-table-cart pos-relative">
+				<div class="wrap-table-shopping-cart bgwhite">
+					<table class="table-shopping-cart">
+						<tr class="table-head">
+							<th class="column-1"></th>
+							<th class="column-2">Product</th>
+							<th class="column-3">Price</th>
+							<th class="column-4 p-l-70">Quantity</th>
+							<th class="column-5">Subtotal</th>
+						</tr>
+						{% for row in cartData %}
+						<tr class="table-row">
+							<td class="column-1">
+								<div class="cart-img-product b-rad-4 o-f-hidden">
+
+									<img src={{ url_for('static', filename='uploads/' + row[2]) +'.png' }} id="itemImage" />
+								</div>
+							</td>
+							<td class="column-2">{{row[2]}}</td>
+                            <span width="20px"></span>
+							<td class="column-3">${{row[3]}}</td>
+
+							<td class="column-4">
+								<div class="flex-w bo5 of-hidden w-size17">
+								</div>
+
+
+									<input class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="{{row[4]}}" disabled>
+                                    <a href="/removeFromCart?productId={{row[1]}}"/>Remove Product
+							</td>
+							<td class="column-5">${{row[5]}}</td>
+						</tr>
+                    {% endfor %}
+
+					</table>
+				</div>
+			</div>
+<div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
+
+
+				<div class="flex-w flex-m w-full-sm">
+                    	</div>
+    <div class="size10 trans-0-4 m-t-10 m-b-10">
+                    Shipping & handling :$ 0.00
+                    <br>
+                    Taxes(6% on grand total): {{tax}}
+                    <br>
+                    Grand Total:        $ {{totalsum}}
+				</div>
+
+
+			</div>
+			<div class="flex-w flex-sb-m p-t-25 p-b-25 bo8 p-l-35 p-r-60 p-lr-15-sm">
+				<div class="flex-w flex-m w-full-sm">
+
+				</div>
+                {% if totalsum > 0.00 %}
+				<div class="size10 trans-0-4 m-t-10 m-b-10">				<!-- Button -->
+
+					<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+						<a href="/checkoutPage?userId={{request.args.get('userId')}}">Proceed to checkout</a>
+					</button>
+
+
+				</div>
+                {% else %}
+
+                    <p>Please add products to the cart.</p>
+
+                    {% endif %}
+			</div>
+
+			<!-- Total -->
+
+		</div>
+	</section>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
