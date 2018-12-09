@@ -110,6 +110,32 @@ def cart():
                                productCountinKartForGivenUser=productCountinKartForGivenUser, loggedIn=loggedIn,
                                firstName=firstName, totalsum=totalsum, tax=tax)
     else:
+        return redirect(url_for('root'))
+
+
+@app.route("/admin/products", methods=['GET'])
+def getProducts():
+    products = Product.query.all()
+    return render_template('adminProducts.html', products = products)
+
+
+@app.route("/admin/products/new", methods=['GET', 'POST'])
+def addProduct():
+    form = addProductForm()
+    if form.validate_on_submit():
+        product = Product(sku=form.sku.data, product_name=form.productName.data,
+                          description=form.productDescription.data, image='somefile.png', quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
+        db.session.add(product)
+        db.session.commit()
+        flash(f'Product {form.productName}! added successfully', 'success')
+        return redirect(url_for('root'))
+    return render_template("addProduct.html", form=form)
+
+
+@app.route("/admin/product/<int:product_id>", methods=['GET', 'POST'])
+def product(product_id):
+    product = Product.query.get_or_404(product_id)
+    return render_template('adminEditProduct.html', product=product)
         return redirect(url_for('loginForm'))
 
 
@@ -139,3 +165,4 @@ def createOrder():
     if email:
         sendEmailconfirmation(email, username,ordernumber)
     return render_template("OrderPage.html", email=email, username=username,ordernumber=ordernumber,address=address,fullname=fullname,phonenumber=phonenumber)
+

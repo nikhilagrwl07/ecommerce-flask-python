@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, DateField, \
-    SelectField, HiddenField, RadioField
+    SelectField, HiddenField, RadioField, FloatField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ecommerce import db
@@ -125,6 +125,15 @@ def extractAndPersistKartDetails(productId):
     db.session.flush()
     db.session.commit()
 
+
+
+class addProductForm(FlaskForm):
+    sku = IntegerField('Product SKU', validators=[DataRequired()])
+    productName = StringField('Product Name', validators=[DataRequired()])
+    productDescription = TextAreaField('Product Description', validators=[DataRequired()])
+    productPrice = FloatField('Product Price', validators=[DataRequired()])
+    productQuantity = IntegerField('Product Quantity', validators=[DataRequired()])
+    submit = SubmitField('Add Product')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
