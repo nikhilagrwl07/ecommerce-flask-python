@@ -136,7 +136,7 @@ def addProduct():
 def product(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template('adminEditProduct.html', product=product)
-        return redirect(url_for('loginForm'))
+        # return redirect(url_for('loginForm'))
 
 
 @app.route("/removeFromCart")

@@ -13,6 +13,10 @@ VALUES
 	(14, '101112', 'Macbook', 'Macbook', 'Macbook.jpg', 1, 4999.0, 499.0, 0.0, NULL),
 	(15, '121314', 'Apple Watch', 'applewatch', 'applewatch.jpeg', 1, 10490.0, 499.0, 0.0, NULL);
 
+INSERT INTO `product` (`productid`, `sku`, `product_name`, `description`, `image`, `quantity`, `discounted_price`, `regular_price`, `product_rating`, `product_review`)
+VALUES
+	(16, '141516', 'Google Pixel', 'Google Pixel', 'GooglePixel.png', 2, 499.0, 499.0, 0.0, NULL);
+
 
 
 INSERT INTO `category` (`categoryid`, `category_name`, `date_posted`)
@@ -31,6 +35,40 @@ VALUES
 	(2, 9, '2018-12-02 14:43:59'),
 	(3, 14, '2018-12-02 14:43:59'),
 	(4, 15, '2018-12-02 14:43:59');
+
+INSERT INTO `product_category` (`categoryid`, `productid`, `created_on`)
+VALUES
+	(1, 16, '2018-12-06 13:47:42');
+
+INSERT INTO `product` ( `sku`, `product_name`, `description`, `image`, `quantity`, `discounted_price`, `regular_price`, `product_rating`, `product_review`)
+VALUES
+	( '32434223', 'DellInspiron', 'Dell Inspiron', 'DellInspiron.png', 1, 4999.0, 499.0, 0.0, NULL);
+
+
+INSERT INTO `product_category` (`categoryid`, `productid`)
+VALUES
+	(3, 17);
+
+
+INSERT INTO `product` ( `sku`, `product_name`, `description`, `image`, `quantity`, `discounted_price`, `regular_price`, `product_rating`, `product_review`)
+VALUES
+	( '34543345', 'Andriod Watch', 'Andriod Watch', 'andriodWatch.png', 1, 4999.0, 499.0, 0.0, NULL);
+
+
+INSERT INTO `product_category` (`categoryid`, `productid`)
+VALUES
+	(4, 18);
+
+
+INSERT INTO `product` ( `sku`, `product_name`, `description`, `image`, `quantity`, `discounted_price`, `regular_price`, `product_rating`, `product_review`)
+VALUES
+	( '32434534223', 'Huawei', 'Huawei', 'Huawei.png', 1, 999.0, 350.0, 0.0, NULL);
+
+
+INSERT INTO `product_category` (`categoryid`, `productid`)
+VALUES
+	(1, 20);
+
 
 
 
