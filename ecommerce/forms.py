@@ -21,13 +21,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-
-
 def getAllProducts():
-    itemData = Product.query.with_entities(Product.productid, Product.product_name, Product.discounted_price,
-                                           Product.description, Product.image, Product.quantity).all()
+    itemData = Product.query.join(ProductCategory, Product.productid == ProductCategory.productid) \
+        .add_columns(Product.productid, Product.product_name, Product.discounted_price, Product.description,
+                     Product.image, Product.quantity) \
+        .join(Category, Category.categoryid == ProductCategory.categoryid)\
+        .order_by(Category.categoryid.desc())\
+        .all()
     return itemData
-
 
 def getAllCategoryId():
     return Category.query.with_entities(Category.categoryid, Category.category_name).all()
