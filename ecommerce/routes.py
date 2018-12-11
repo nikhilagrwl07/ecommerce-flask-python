@@ -150,13 +150,46 @@ def addProduct():
         db.session.commit()
         flash(f'Product {form.productName}! added successfully', 'success')
         return redirect(url_for('root'))
-    return render_template("addProduct.html", form=form)
+    return render_template("addProduct.html", form=form, legend="New Product")
 
 
 @app.route("/admin/product/<int:product_id>", methods=['GET', 'POST'])
 def product(product_id):
     product = Product.query.get_or_404(product_id)
-    return render_template('adminEditProduct.html', product=product)
+    return render_template('adminViewProduct.html', product=product)
+
+@app.route("/admin/product/<int:product_id>/update", methods=['GET', 'POST'])
+def update_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    form = addProductForm()
+    form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
+    if form.validate_on_submit():
+        product.product_name = form.productName.data
+        product.sku = form.sku.data
+        product.productDescription = form.productDescription.data
+        product.quantity = form.productQuantity.data
+        # product.discounted_price = form.data.discounted_price = 15
+        product.regular_price = form.productPrice.data
+        db.session.commit()
+
+        product_category = ProductCategory.query.get_or_404(productid=product.productid)
+
+        if form.category.data != product_category.categoryid:
+            new_product_category = ProductCategory(categoryid=form.category.data, productid = product.productid)
+            db.session.add(new_product_category)
+            db.session.commit()
+            db.session.delete(product_category)
+            db.session.commit()
+
+        flash('This product has been updated!', 'success')
+        return redirect(url_for('getProducts'))
+    elif request.method == 'GET':
+        form.productName.data = product.product_name
+        form.sku.data = product.sku
+        form.productDescription.data = product.description
+        form.productPrice.data = product.regular_price
+        form.productQuantity.data = product.quantity
+    return render_template('addProduct.html', legend="Update Product", form=form)
 
 
 @app.route("/admin/users", methods=['GET'])
