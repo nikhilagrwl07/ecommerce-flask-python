@@ -131,11 +131,12 @@ class addCategoryForm(FlaskForm):
     submit = SubmitField('Add Category')
 
 class addProductForm(FlaskForm):
-    sku = IntegerField('Product SKU', validators=[DataRequired()])
-    productName = StringField('Product Name', validators=[DataRequired()])
-    productDescription = TextAreaField('Product Description', validators=[DataRequired()])
-    productPrice = FloatField('Product Price', validators=[DataRequired()])
-    productQuantity = IntegerField('Product Quantity', validators=[DataRequired()])
+    category = SelectField('Category:', coerce=int, id='select_category')
+    sku = IntegerField('Product SKU:', validators=[DataRequired()])
+    productName = StringField('Product Name:', validators=[DataRequired()])
+    productDescription = TextAreaField('Product Description:', validators=[DataRequired()])
+    productPrice = FloatField('Product Price:', validators=[DataRequired()])
+    productQuantity = IntegerField('Product Quantity:', validators=[DataRequired()])
     submit = SubmitField('Add Product')
 
 class RegistrationForm(FlaskForm):

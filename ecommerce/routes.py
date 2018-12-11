@@ -139,10 +139,14 @@ def getProducts():
 @app.route("/admin/products/new", methods=['GET', 'POST'])
 def addProduct():
     form = addProductForm()
+    form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
     if form.validate_on_submit():
         product = Product(sku=form.sku.data, product_name=form.productName.data,
                           description=form.productDescription.data, image='somefile.png', quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
         db.session.add(product)
+        db.session.commit()
+        product_category = ProductCategory(categoryid=form.category.data, productid=product.productid)
+        db.session.add(product_category)
         db.session.commit()
         flash(f'Product {form.productName}! added successfully', 'success')
         return redirect(url_for('root'))

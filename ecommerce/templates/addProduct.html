@@ -1,5 +1,20 @@
 <form action="" method="POST">
         {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.category.label }}
+            {% if form.category.errors %}
+                {{ form.category(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.category.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.category}}
+            {% endif %}
+        </div>
+
         <div class="form-group">
             {{ form.sku.label }}
             {% if form.sku.errors %}
