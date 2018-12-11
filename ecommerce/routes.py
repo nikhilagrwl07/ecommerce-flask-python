@@ -146,6 +146,21 @@ def getCategories():
 
     return render_template('adminCategories.html', categories = categories)
 
+#this method is copied from Schafer's tutorials
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/uploads', picture_fn)
+
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
     products = Product.query.all()
@@ -155,15 +170,17 @@ def getProducts():
 def addProduct():
     form = addProductForm()
     form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
+    product_icon = ""
     if form.validate_on_submit():
-        product = Product(sku=form.sku.data, product_name=form.productName.data,
-                          description=form.productDescription.data, image='somefile.png', quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
+        if form.image.data:
+            product_icon = save_picture(form.image.data)
+        product = Product(sku=form.sku.data, product_name=form.productName.data, description=form.productDescription.data, image=product_icon, quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
         db.session.add(product)
         db.session.commit()
         product_category = ProductCategory(categoryid=form.category.data, productid=product.productid)
         db.session.add(product_category)
         db.session.commit()
-        flash(f'Product {form.productName}! added successfully', 'success')
+        flash(f'Product {form.productName} added successfully', 'success')
         return redirect(url_for('root'))
     return render_template("addProduct.html", form=form, legend="New Product")
 
