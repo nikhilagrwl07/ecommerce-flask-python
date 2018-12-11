@@ -155,6 +155,12 @@ def product(product_id):
     return render_template('adminEditProduct.html', product=product)
 
 
+@app.route("/admin/users", methods=['GET'])
+def getUsers():
+    users = User.query.all()
+    return render_template('adminUsers.html', users= users)
+
+
 @app.route("/removeFromCart")
 def removeFromCart():
     if isUserLoggedIn():
