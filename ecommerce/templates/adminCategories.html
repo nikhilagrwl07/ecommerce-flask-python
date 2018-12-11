@@ -15,7 +15,7 @@
               {% for category in categories %}
                 <tr>
                   <td>{{ category.category_name}}</td>
-                  <td><a href="#" class="btn btn-primary">Edit</a></td>
+                  <td><a href="{{ url_for('update_category', category_id=category.categoryid) }}" class="btn btn-primary">Edit</a></td>
                 </tr>
               {% endfor %}
             </tbody>

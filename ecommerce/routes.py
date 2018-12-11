@@ -125,11 +125,26 @@ def addCategory():
     return render_template("addCategory.html", form=form)
 
 
+@app.route("/admin/categories/<int:category_id>/update", methods=['GET', 'POST'])
+def update_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    form = addCategoryForm()
+    if form.validate_on_submit():
+        category.category_name= form.category_name.data
+        db.session.commit()
+        flash('This product has been updated!', 'success')
+        return redirect(url_for('getCategories'))
+    elif request.method == 'GET':
+        form.category_name.data = category.category_name
+    return render_template('addCategory.html', legend="Update Category", form=form)
+
+
 @app.route("/admin/categories", methods=['GET'])
 def getCategories():
     categories = Category.query.all()
-    return render_template('adminCategories.html', categories = categories)
+    #Query for number of products on a category: SELECT category.categoryid, category.category_name, COUNT(product_category.productid) FROM category LEFT JOIN product_category ON category.categoryid = product_category.categoryid GROUP BY category.categoryid
 
+    return render_template('adminCategories.html', categories = categories)
 
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
@@ -171,9 +186,10 @@ def update_product(product_id):
         # product.discounted_price = form.data.discounted_price = 15
         product.regular_price = form.productPrice.data
         db.session.commit()
-
-        product_category = ProductCategory.query.get_or_404(productid=product.productid)
-
+        product_category = ProductCategory.query.filter_by(productid = product.productid).first()
+        print("This is product category")
+        print(product_category)
+        print("That was product category")
         if form.category.data != product_category.categoryid:
             new_product_category = ProductCategory(categoryid=form.category.data, productid = product.productid)
             db.session.add(new_product_category)
