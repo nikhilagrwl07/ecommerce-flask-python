@@ -142,13 +142,13 @@ def getusercartdetails():
     userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
 
     productsincart = Product.query.join(Cart, Product.productid == Cart.productid) \
-        .add_columns(Product.productid, Product.product_name, Product.discounted_price, Cart.quantity) \
+        .add_columns(Product.productid, Product.product_name, Product.discounted_price, Cart.quantity,Product.image) \
         .add_columns(Product.discounted_price * Cart.quantity).filter(
         Cart.userid == userId)
     totalsum = 0
 
     for row in productsincart:
-        totalsum += row[5]
+        totalsum += row[6]
 
     tax = ("%.2f" % (.06 * float(totalsum)))
 
@@ -276,12 +276,12 @@ def sendEmailconfirmation(email, username,ordernumber):
       <body>
         <p><br>
            Please stay tuned for more fabulous offers and gadgets.You can visit your account for more details on this order.<br> 
-           <br>Please write to us at <u>shopoholic@usa.com</u> for any assistance.</br>
+           <br>Please write to us at <u>stargadgets@engineer.com</u> for any assistance.</br>
            <br></br>
            <br></br>
            Thank you!
            <br></br>
-           Shopoholic Team          
+           StarGadgets Team          
         </p>
       </body>
     </html>

@@ -15,8 +15,10 @@
 </head>
 <body style="background-color:antiquewhite">
 <div id="title">
-
-
+	<form>
+		<input id="searchBox" type="text" name="searchQuery">
+		<input id="searchButton" type="submit" value="Search">
+	</form>
 	{% if not loggedIn %}
 	<div id="signInButton">
 		<a class="link" href="/signIn">Sign In</a>
@@ -32,10 +34,15 @@
 		</div>
 	</div>
 	{% endif %}
-	<div id="checkout">
+	<div id="kart">
 		<a class="link" href="/cart">
 			<img src={{url_for('static', filename='images/shoppingCart.png')}} id="cartIcon" />
 			CART {{productCountinKartForGivenUser}}
+		</a>
+	</div>
+	<div id="home">
+		<a class="link" href="/home">
+			<img src={{url_for('static', filename='images/logo.png')}} id="logoIconcart" />
 		</a>
 	</div>
 </div>

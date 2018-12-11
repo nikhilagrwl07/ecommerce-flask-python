@@ -42,7 +42,7 @@
 	</div>
 	<div id="home">
 		<a class="link" href="/home">
-			<img src={{url_for('static', filename='images/logo.png')}} id="logoIcon" />
+			<img src={{url_for('static', filename='images/logo.png')}} id="logoIconcart" />
 		</a>
 	</div>
 </div>
@@ -73,7 +73,7 @@
 							<td class="column-1">
 								<div class="cart-img-product b-rad-4 o-f-hidden">
 
-									<img src={{ url_for('static', filename='uploads/' + row[2]) +'.png' }} id="itemImage" />
+									<img src={{ url_for('static', filename='uploads/' + row[5])}} id="itemImage" />
 								</div>
 							</td>
 							<td class="column-2">{{row[2]}}</td>
@@ -81,14 +81,13 @@
 							<td class="column-3">${{row[3]}}</td>
 
 							<td class="column-4">
-								<div class="flex-w bo5 of-hidden w-size17">
-								</div>
+
 
 
 									<input class="size8 m-text18 t-center num-product" type="number" name="num-product1" value="{{row[4]}}" disabled>
                                     <a href="/removeFromCart?productId={{row[1]}}"/>Remove Product
 							</td>
-							<td class="column-5">${{row[5]}}</td>
+							<td class="column-5">${{row[6]}}</td>
 						</tr>
                     {% endfor %}
 
