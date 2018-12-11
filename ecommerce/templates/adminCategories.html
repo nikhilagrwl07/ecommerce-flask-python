@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="col-4">
+            <a href="{{ url_for('addCategory') }}" class="btn btn-success m-5">Add a New Category</a>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Number of products</th>
+            </tr>
+          </thead>
+            <tbody>
+              {% for category in categories %}
+                <tr>
+                  <td>{{ category.category_name}}</td>
+                  <td><a href="#" class="btn btn-primary">Edit</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% endblock content %}

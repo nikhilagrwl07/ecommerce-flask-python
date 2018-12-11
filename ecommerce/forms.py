@@ -126,6 +126,9 @@ def extractAndPersistKartDetails(productId):
     db.session.commit()
 
 
+class addCategoryForm(FlaskForm):
+    category_name = StringField('Category Name', validators=[DataRequired()])
+    submit = SubmitField('Add Category')
 
 class addProductForm(FlaskForm):
     sku = IntegerField('Product SKU', validators=[DataRequired()])

@@ -113,11 +113,28 @@ def cart():
         return redirect(url_for('root'))
 
 
+@app.route("/admin/categories/new", methods=['GET', 'POST'])
+def addCategory():
+    form = addCategoryForm()
+    if form.validate_on_submit():
+        category = Category(category_name=form.category_name.data)
+        db.session.add(category)
+        db.session.commit()
+        flash(f'Category {form.category_name.data}! added successfully', 'success')
+        return redirect(url_for('root'))
+    return render_template("addCategory.html", form=form)
+
+
+@app.route("/admin/categories", methods=['GET'])
+def getCategories():
+    categories = Category.query.all()
+    return render_template('adminCategories.html', categories = categories)
+
+
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
     products = Product.query.all()
     return render_template('adminProducts.html', products = products)
-
 
 @app.route("/admin/products/new", methods=['GET', 'POST'])
 def addProduct():
@@ -136,7 +153,6 @@ def addProduct():
 def product(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template('adminEditProduct.html', product=product)
-        return redirect(url_for('loginForm'))
 
 
 @app.route("/removeFromCart")

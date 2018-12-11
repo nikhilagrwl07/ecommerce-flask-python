@@ -1,26 +1,34 @@
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Sku</th>
-          <th scope="col">Name</th>
-          <th scope="col">Description</th>
-          <th scope="col">Regular Price</th>
-          <th scope="col">Discounted Price</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-        <tbody>
-          {% for product in products %}
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <div class="col-4">
+            <a href="{{ url_for('admin/products/new') }}">Add a New Product</a>
+        </div>
+        <table class="table table-hover">
+          <thead>
             <tr>
-              <td>{{ product.sku}}</td>
-              <td>{{ product.product_name}}</td>
-              <td>{{ product.description}}</td>
-              <td>{{ product.regular_price}}</td>
-              <td>{{ product.discounted_price}}</td>
-              <td>{{ product.quantity}}</td>
-              <td>Edit | Delete</td>
+              <th scope="col">Sku</th>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Regular Price</th>
+              <th scope="col">Discounted Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Actions</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+            <tbody>
+              {% for product in products %}
+                <tr>
+                  <td>{{ product.sku}}</td>
+                  <td>{{ product.product_name}}</td>
+                  <td>{{ product.description}}</td>
+                  <td>{{ product.regular_price}}</td>
+                  <td>{{ product.discounted_price}}</td>
+                  <td>{{ product.quantity}}</td>
+                  <td><a href="#" class="btn btn-primary">Edit</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% endblock content %}
