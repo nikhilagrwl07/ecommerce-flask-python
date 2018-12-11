@@ -54,7 +54,7 @@ def root():
     loggedIn, firstName, productCountinKartForGivenUser = getLoginUserDetails()
     allProductDetails = getAllProducts()
     allProductsMassagedDetails = massageItemData(allProductDetails)
-    categoryData = getAllCategoryId()
+    categoryData = getCategoryDetails()
 
     return render_template('home.html', itemData=allProductsMassagedDetails, loggedIn=loggedIn, firstName=firstName,
                            productCountinKartForGivenUser=productCountinKartForGivenUser,

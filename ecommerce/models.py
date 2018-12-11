@@ -34,7 +34,7 @@ class Category(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Category('{self.categoryName}', '{self.date_posted}')"
+        return f"Category('{self.categoryid}', '{self.category_name}')"
 
 
 class Product(db.Model):

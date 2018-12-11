@@ -30,8 +30,13 @@ def getAllProducts():
         .all()
     return itemData
 
-def getAllCategoryId():
-    return Category.query.with_entities(Category.categoryid, Category.category_name).all()
+def getCategoryDetails():
+    itemData = Category.query.join(ProductCategory, Category.categoryid == ProductCategory.categoryid) \
+        .join(Product, Product.productid == ProductCategory.productid) \
+        .order_by(Category.categoryid.desc()) \
+        .distinct(Category.categoryid)\
+        .all()
+    return itemData
 
 
 def massageItemData(data):
