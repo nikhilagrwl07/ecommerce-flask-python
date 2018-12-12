@@ -67,7 +67,7 @@ CREATE TABLE `cart` (
 
 CREATE TABLE `order` (
   `orderid` int(11) NOT NULL AUTO_INCREMENT,
-  `order_date` date NOT NULL,
+  `order_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `total_price` decimal(4,1) NOT NULL DEFAULT 0.00,
   `userid`  int(11) NOT NULL,
   PRIMARY KEY (`orderid`),
