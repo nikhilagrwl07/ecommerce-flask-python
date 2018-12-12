@@ -1,9 +1,6 @@
-import os
-import secrets
-from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, abort, session
-from ecommerce import app, mysql
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import render_template, request
+
+from ecommerce import app
 from ecommerce.forms import *
 from ecommerce.models import *
 
@@ -94,7 +91,12 @@ def productDescription():
 def addToCart():
     if isUserLoggedIn():
         productId = int(request.args.get('productId'))
-        extractAndPersistKartDetails(productId)
+
+        # Using Flask-SQLAlchmy SubQuery
+        extractAndPersistKartDetailsUsingSubquery(productId)
+
+        # Using Flask-SQLAlchmy normal query
+        # extractAndPersistKartDetailsUsingkwargs(productId)
         flash('Item successfully added to cart !!', 'success')
         return redirect(url_for('root'))
     else:

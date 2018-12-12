@@ -1,40 +1,33 @@
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
-from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, IntegerField, DateField, \
-    SelectField, HiddenField, RadioField, FloatField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from ecommerce import db
-from ecommerce.models import *
-from wtforms.fields.html5 import DateField
-import os
-import secrets
-from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, abort
-from ecommerce.models import *
-from sqlalchemy import select, func, Integer, Table, Column, MetaData
-from flask import session, request
-import hashlib, os
+import hashlib
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from flask import session
+from flask import url_for, flash, redirect
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, RadioField, FloatField
+from wtforms.validators import DataRequired, Length, Email
+
+from ecommerce import mysql
+from ecommerce.models import *
 
 
 def getAllProducts():
     itemData = Product.query.join(ProductCategory, Product.productid == ProductCategory.productid) \
         .add_columns(Product.productid, Product.product_name, Product.discounted_price, Product.description,
                      Product.image, Product.quantity) \
-        .join(Category, Category.categoryid == ProductCategory.categoryid)\
-        .order_by(Category.categoryid.desc())\
+        .join(Category, Category.categoryid == ProductCategory.categoryid) \
+        .order_by(Category.categoryid.desc()) \
         .all()
     return itemData
+
 
 def getCategoryDetails():
     itemData = Category.query.join(ProductCategory, Category.categoryid == ProductCategory.categoryid) \
         .join(Product, Product.productid == ProductCategory.productid) \
         .order_by(Category.categoryid.desc()) \
-        .distinct(Category.categoryid)\
+        .distinct(Category.categoryid) \
         .all()
     return itemData
 
@@ -54,9 +47,17 @@ def massageItemData(data):
 
 
 def is_valid(email, password):
-    data = User.query.with_entities(User.email, User.password).all()
-    for row in data:
-        if row[0] == email and row[1] == hashlib.md5(password.encode()).hexdigest():
+    # Using Flask-SQLAlchmy ORM
+    # data = User.query.with_entities(User.email, User.password).all()
+
+    # Using Raw SQL Select Query
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT email, password FROM user")
+    userData = cur.fetchall()
+    cur.close()
+
+    for row in userData:
+        if row['email'] == email and row['password'] == hashlib.md5(password.encode()).hexdigest():
             return True
     return False
 
@@ -116,21 +117,39 @@ def isUserLoggedIn():
         return True
 
 
-def extractAndPersistKartDetails(productId):
+# Using Flask-SQL Alchemy SubQuery
+def extractAndPersistKartDetailsUsingSubquery(productId):
     userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
     userId = userId[0]
+
+    subqury = Cart.query.filter(Cart.userid == userId).filter(Cart.productid == productId).subquery()
+    qry = db.session.query(Cart.quantity).select_entity_from(subqury).all()
+
+    if len(qry) == 0:
+        cart = Cart(userid=userId, productid=productId, quantity=1)
+    else:
+        cart = Cart(userid=userId, productid=productId, quantity=qry[0][0] + 1)
+
+    db.session.merge(cart)
+    db.session.flush()
+    db.session.commit()
+
+# Using Flask-SQL Alchemy query
+def extractAndPersistKartDetailsUsingkwargs(productId):
+    userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
+    userId = userId[0]
+
     kwargs = {'userid': userId, 'productid': productId}
     quantity = Cart.query.with_entities(Cart.quantity).filter_by(**kwargs).first()
 
     if quantity is not None:
-        cart = Cart(userid=userId, productid=productId, quantity=quantity[0] + 1)
+        cart = Cart(userid=userId, productid=productId, quantity=qry[0][0] + 1)
     else:
         cart = Cart(userid=userId, productid=productId, quantity=1)
 
     db.session.merge(cart)
     db.session.flush()
     db.session.commit()
-
 
 
 class addProductForm(FlaskForm):
