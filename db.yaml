@@ -1,5 +1,5 @@
 mysql_host: 'localhost'
-mysql_user: 'root'
+mysql_user: 'shend'
 # Enter your password in field below
-mysql_password: '12345'
+mysql_password: 'root'
 mysql_db: 'ecommerce'

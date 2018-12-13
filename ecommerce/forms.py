@@ -118,6 +118,16 @@ def isUserLoggedIn():
         return True
 
 
+# check if user is an admin
+def isUserAdmin():
+    if isUserLoggedIn():
+        # ProductCategory.query.filter_by(productid=product.productid).first()
+        userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
+        currentUser = User.query.get_or_404(userId)
+        return currentUser.isadmin
+
+
+
 # Using Flask-SQL Alchemy SubQuery
 def extractAndPersistKartDetailsUsingSubquery(productId):
     userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()

@@ -9,12 +9,14 @@
             <tr>
                 <th>Category Name</th>
                 <th>Number of products</th>
+                <th>Actions</th>
             </tr>
           </thead>
             <tbody>
               {% for category in categories %}
                 <tr>
                   <td>{{ category.category_name}}</td>
+                  <td>{{ category.noOfProducts }}</td>
                   <td><a href="{{ url_for('update_category', category_id=category.categoryid) }}" class="btn btn-primary">Edit</a></td>
                 </tr>
               {% endfor %}
