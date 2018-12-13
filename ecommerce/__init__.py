@@ -5,7 +5,7 @@ from flask_mysqldb import MySQL
 import yaml
 
 ######### Enable this for debugging #########
-import logging
+# import logging
 # logging.basicConfig()
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 # SQLALCHEMY_TRACK_MODIFICATIONS = True

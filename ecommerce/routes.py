@@ -118,39 +118,67 @@ def cart():
     else:
         return redirect(url_for('root'))
 
+@app.route("/admin/category/<int:category_id>", methods=['GET'])
+def category(category_id):
+    if isUserAdmin():
+        category = Category.query.get_or_404(category_id)
+        return render_template('adminCategory.html', category=category)
+    return redirect(url_for('root'))
 
 @app.route("/admin/categories/new", methods=['GET', 'POST'])
 def addCategory():
-    form = addCategoryForm()
-    if form.validate_on_submit():
-        category = Category(category_name=form.category_name.data)
-        db.session.add(category)
-        db.session.commit()
-        flash(f'Category {form.category_name.data}! added successfully', 'success')
-        return redirect(url_for('root'))
-    return render_template("addCategory.html", form=form)
+    if isUserAdmin():
+        form = addCategoryForm()
+        if form.validate_on_submit():
+            category = Category(category_name=form.category_name.data)
+            db.session.add(category)
+            db.session.commit()
+            flash(f'Category {form.category_name.data}! added successfully', 'success')
+            return redirect(url_for('getCategories'))
+        return render_template("addCategory.html", form=form)
+    return redirect(url_for('getCategories'))
 
 
 @app.route("/admin/categories/<int:category_id>/update", methods=['GET', 'POST'])
 def update_category(category_id):
-    category = Category.query.get_or_404(category_id)
-    form = addCategoryForm()
-    if form.validate_on_submit():
-        category.category_name= form.category_name.data
-        db.session.commit()
-        flash('This product has been updated!', 'success')
-        return redirect(url_for('getCategories'))
-    elif request.method == 'GET':
-        form.category_name.data = category.category_name
-    return render_template('addCategory.html', legend="Update Category", form=form)
+    if isUserAdmin():
+        category = Category.query.get_or_404(category_id)
+        form = addCategoryForm()
+        if form.validate_on_submit():
+            category.category_name= form.category_name.data
+            db.session.commit()
+            flash('This category has been updated!', 'success')
+            return redirect(url_for('getCategories'))
+        elif request.method == 'GET':
+            form.category_name.data = category.category_name
+        return render_template('addCategory.html', legend="Update Category", form=form)
+    return redirect(url_for('getCategories'))
 
+
+@app.route("/admin/category/<int:category_id>/delete", methods=['POST'])
+def delete_category(category_id):
+    if isUserAdmin():
+        # category= Category.query.get_or_404(category_id)
+        # db.session.delete(category)
+        # db.session.commit()
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM product_category WHERE categoryid=" + str(category_id))
+        cur.execute("DELETE FROM category WHERE categoryid=" + str(category_id))
+        cur.close()
+        flash('Your category has been deleted!', 'success')
+    return redirect(url_for('getCategories'))
 
 @app.route("/admin/categories", methods=['GET'])
 def getCategories():
-    categories = Category.query.all()
-    #Query for number of products on a category: SELECT category.categoryid, category.category_name, COUNT(product_category.productid) FROM category LEFT JOIN product_category ON category.categoryid = product_category.categoryid GROUP BY category.categoryid
+    if isUserAdmin():
+        #categories = Category.query.all()
+        cur = mysql.connection.cursor()
+        #Query for number of products on a category:
+        cur.execute('SELECT category.categoryid, category.category_name, COUNT(product_category.productid) as noOfProducts FROM category LEFT JOIN product_category ON category.categoryid = product_category.categoryid GROUP BY category.categoryid');
+        categories = cur.fetchall()
+        return render_template('adminCategories.html', categories = categories)
+    return redirect(url_for('root'))
 
-    return render_template('adminCategories.html', categories = categories)
 
 #this method is copied from Schafer's tutorials
 def save_picture(form_picture):
@@ -159,7 +187,7 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/uploads', picture_fn)
 
-    output_size = (125, 125)
+    output_size = (250, 250)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -169,72 +197,96 @@ def save_picture(form_picture):
 
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
-    products = Product.query.all()
-    return render_template('adminProducts.html', products=products)
+    if isUserAdmin():
+        products = Product.query.all()
+        return render_template('adminProducts.html', products=products)
+    return redirect(url_for('root'))
 
 @app.route("/admin/products/new", methods=['GET', 'POST'])
 def addProduct():
-    form = addProductForm()
-    form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
-    product_icon = ""
-    if form.validate_on_submit():
-        if form.image.data:
+    if isUserAdmin():
+        form = addProductForm()
+        form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
+
+        if form.validate_on_submit():
+            # if form.image.data:
             product_icon = save_picture(form.image.data)
-        product = Product(sku=form.sku.data, product_name=form.productName.data, description=form.productDescription.data, image=product_icon, quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
+            product = Product(sku=form.sku.data, product_name=form.productName.data, description=form.productDescription.data, image=product_icon, quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
 
-        db.session.add(product)
-        db.session.commit()
-        product_category = ProductCategory(categoryid=form.category.data, productid=product.productid)
-        db.session.add(product_category)
-        db.session.commit()
-        flash(f'Product {form.productName} added successfully', 'success')
-        return redirect(url_for('root'))
-    return render_template("addProduct.html", form=form, legend="New Product")
+            db.session.add(product)
+            db.session.commit()
+            product_category = ProductCategory(categoryid=form.category.data, productid=product.productid)
+            db.session.add(product_category)
+            db.session.commit()
+            flash(f'Product {form.productName} added successfully', 'success')
+            return redirect(url_for('root'))
+        return render_template("addProduct.html", form=form, legend="New Product")
+    return redirect(url_for('root'))
 
 
-@app.route("/admin/product/<int:product_id>", methods=['GET', 'POST'])
+@app.route("/admin/product/<int:product_id>", methods=['GET'])
 def product(product_id):
-    product = Product.query.get_or_404(product_id)
-    return render_template('adminViewProduct.html', product=product)
+    if isUserAdmin():
+        product = Product.query.get_or_404(product_id)
+        return render_template('adminProduct.html', product=product)
+    return redirect(url_for('root'))
   
 @app.route("/admin/product/<int:product_id>/update", methods=['GET', 'POST'])
 def update_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    form = addProductForm()
-    form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
-    if form.validate_on_submit():
-        product.product_name = form.productName.data
-        product.sku = form.sku.data
-        product.productDescription = form.productDescription.data
-        product.quantity = form.productQuantity.data
-        # product.discounted_price = form.data.discounted_price = 15
-        product.regular_price = form.productPrice.data
-        db.session.commit()
-        product_category = ProductCategory.query.filter_by(productid = product.productid).first()
-        print("This is product category")
-        print(product_category)
-        print("That was product category")
-        if form.category.data != product_category.categoryid:
-            new_product_category = ProductCategory(categoryid=form.category.data, productid = product.productid)
-            db.session.add(new_product_category)
+    if isUserAdmin():
+        product = Product.query.get_or_404(product_id)
+        form = addProductForm()
+        form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
+        if form.validate_on_submit():
+            product.product_name = form.productName.data
+            product.sku = form.sku.data
+            product.productDescription = form.productDescription.data
+            product.quantity = form.productQuantity.data
+            # product.discounted_price = form.data.discounted_price = 15
+            product.regular_price = form.productPrice.data
             db.session.commit()
-            db.session.delete(product_category)
-            db.session.commit()
+            product_category = ProductCategory.query.filter_by(productid = product.productid).first()
+            print("This is product category")
+            print(product_category)
+            print("That was product category")
+            if form.category.data != product_category.categoryid:
+                new_product_category = ProductCategory(categoryid=form.category.data, productid = product.productid)
+                db.session.add(new_product_category)
+                db.session.commit()
+                db.session.delete(product_category)
+                db.session.commit()
 
-        flash('This product has been updated!', 'success')
-        return redirect(url_for('getProducts'))
-    elif request.method == 'GET':
-        form.productName.data = product.product_name
-        form.sku.data = product.sku
-        form.productDescription.data = product.description
-        form.productPrice.data = product.regular_price
-        form.productQuantity.data = product.quantity
-    return render_template('addProduct.html', legend="Update Product", form=form)
+            flash('This product has been updated!', 'success')
+            return redirect(url_for('getProducts'))
+        elif request.method == 'GET':
+            form.productName.data = product.product_name
+            form.sku.data = product.sku
+            form.productDescription.data = product.description
+            form.productPrice.data = product.regular_price
+            form.productQuantity.data = product.quantity
+        return render_template('addProduct.html', legend="Update Product", form=form)
+    return redirect(url_for('root'))
+
+@app.route("/admin/product/<int:product_id>/delete", methods=['POST'])
+def delete_product(product_id):
+    if isUserAdmin():
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM product_category WHERE productid=" + str(product_id))
+        cur.execute("DELETE FROM product WHERE productid=" + str(product_id))
+        cur.close()
+        flash('Your product has been deleted!', 'success')
+    return redirect(url_for('getProducts'))
+
 
 @app.route("/admin/users", methods=['GET'])
 def getUsers():
-    users = User.query.all()
-    return render_template('adminUsers.html', users= users)
+    if isUserAdmin():
+        # users = User.query.all()
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT u.fname, u.lname, u.email, u.active, u.city, u.state, COUNT(o.orderid) as noOfOrders FROM `user` u LEFT JOIN `order` o ON u.userid = o.userid GROUP BY u.userid')
+        users = cur.fetchall()
+        return render_template('adminUsers.html', users= users)
+    return redirect(url_for('root'))
 
 
 @app.route("/removeFromCart")

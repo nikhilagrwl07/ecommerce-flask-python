@@ -118,6 +118,16 @@ def isUserLoggedIn():
         return True
 
 
+# check if user is an admin
+def isUserAdmin():
+    if isUserLoggedIn():
+        # ProductCategory.query.filter_by(productid=product.productid).first()
+        userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
+        currentUser = User.query.get_or_404(userId)
+        return currentUser.isadmin
+
+
+
 # Using Flask-SQL Alchemy SubQuery
 def extractAndPersistKartDetailsUsingSubquery(productId):
     userId = User.query.with_entities(User.userid).filter(User.email == session['email']).first()
@@ -155,7 +165,7 @@ def extractAndPersistKartDetailsUsingkwargs(productId):
 
 class addCategoryForm(FlaskForm):
     category_name = StringField('Category Name', validators=[DataRequired()])
-    submit = SubmitField('Add Category')
+    submit = SubmitField('Save')
 
 class addProductForm(FlaskForm):
     category = SelectField('Category:', coerce=int, id='select_category')
@@ -165,7 +175,7 @@ class addProductForm(FlaskForm):
     productPrice = FloatField('Product Price:', validators=[DataRequired()])
     productQuantity = IntegerField('Product Quantity:', validators=[DataRequired()])
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Add Product')
+    submit = SubmitField('Save')
 
 
 # START CART MODULE
