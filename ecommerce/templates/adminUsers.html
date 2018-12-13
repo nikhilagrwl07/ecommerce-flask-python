@@ -10,7 +10,6 @@
               <th scope="col">City</th>
               <th scope="col">State</th>
               <th># of orders</th>
-              <th scope="col">Actions</th>
             </tr>
           </thead>
             <tbody>
@@ -27,8 +26,7 @@
                   </td>
                   <td>{{ user.city}}</td>
                   <td>{{ user.state}}</td>
-                  <td>0</td>
-                  <td><a href="#" class="btn btn-primary">Edit</a></td>
+                  <td>{{ user.noOfOrders }}</td>
                 </tr>
               {% endfor %}
             </tbody>

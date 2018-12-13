@@ -279,7 +279,10 @@ def delete_product(product_id):
 @app.route("/admin/users", methods=['GET'])
 def getUsers():
     if isUserAdmin():
-        users = User.query.all()
+        # users = User.query.all()
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT u.fname, u.lname, u.email, u.active, u.city, u.state, COUNT(o.orderid) as noOfOrders FROM `user` u LEFT JOIN `order` o ON u.userid = o.userid GROUP BY u.userid')
+        users = cur.fetchall()
         return render_template('adminUsers.html', users= users)
     return redirect(url_for('root'))
 
