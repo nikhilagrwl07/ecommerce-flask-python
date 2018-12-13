@@ -24,6 +24,8 @@ def login():
         password = request.form['password']
         if is_valid(email, password):
             session['email'] = email
+            if isUserAdmin():
+                return redirect('admin')
             return redirect(url_for('root'))
         else:
             error = 'Invalid UserId / Password'
@@ -194,6 +196,10 @@ def save_picture(form_picture):
 
     return picture_fn
 
+
+@app.route("/admin", methods=['GET'])
+def admin():
+    return render_template('admin.html')
 
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
