@@ -1,9 +1,11 @@
+import os
+import secrets
+from PIL import Image
 from flask import render_template, request
 
 from ecommerce import app
 from ecommerce.forms import *
 from ecommerce.models import *
-
 
 @app.route("/signIn")
 def loginForm():
