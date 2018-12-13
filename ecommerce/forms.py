@@ -152,12 +152,18 @@ def extractAndPersistKartDetailsUsingkwargs(productId):
     db.session.commit()
 
 
+class addCategoryForm(FlaskForm):
+    category_name = StringField('Category Name', validators=[DataRequired()])
+    submit = SubmitField('Add Category')
+
 class addProductForm(FlaskForm):
-    sku = IntegerField('Product SKU', validators=[DataRequired()])
-    productName = StringField('Product Name', validators=[DataRequired()])
-    productDescription = TextAreaField('Product Description', validators=[DataRequired()])
-    productPrice = FloatField('Product Price', validators=[DataRequired()])
-    productQuantity = IntegerField('Product Quantity', validators=[DataRequired()])
+    category = SelectField('Category:', coerce=int, id='select_category')
+    sku = IntegerField('Product SKU:', validators=[DataRequired()])
+    productName = StringField('Product Name:', validators=[DataRequired()])
+    productDescription = TextAreaField('Product Description:', validators=[DataRequired()])
+    productPrice = FloatField('Product Price:', validators=[DataRequired()])
+    productQuantity = IntegerField('Product Quantity:', validators=[DataRequired()])
+    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Add Product')
 
 

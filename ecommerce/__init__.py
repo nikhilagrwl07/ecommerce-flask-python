@@ -13,7 +13,7 @@ import logging
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://Anegi:gloriam@123@localhost/ecommerce_finalproject'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://shend:root@localhost/ecommerce'
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
