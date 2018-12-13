@@ -6,9 +6,6 @@ import yaml
 
 ######### Enable this for debugging #########
 import logging
-
-
-######### Enable this for debugging #########
 # logging.basicConfig()
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 # SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -26,7 +23,7 @@ ALLOWED_EXTENSIONS = set(['jpeg', 'jpg', 'png', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 ######### Required in Case of firing complex queries without ORM #########
-db2 = yaml.load(open('db.yaml'))
+db2 = yaml.load(open('config.yaml'))
 app.config['MYSQL_HOST'] = db2['mysql_host']
 app.config['MYSQL_USER'] = db2['mysql_user']
 app.config['MYSQL_PASSWORD'] = db2['mysql_password']
