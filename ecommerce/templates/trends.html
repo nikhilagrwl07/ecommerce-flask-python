@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>trends</title>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/util.css') }} >
+	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/main.css') }}>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/home.css') }} />
+<link rel="stylesheet" href={{ url_for('static', filename='css/topStyle.css') }} />
+<!--===============================================================================================-->
+</head>
+<body>
+<div id="title">
+	<form>
+		<input id="searchBox" type="text" name="searchQuery">
+		<input id="searchButton" type="submit" value="Search">
+	</form>
+	{% if not loggedIn %}
+	<div id="signInButton">
+		<a class="link" href="/signIn">Sign In</a>
+	</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Hello, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Your orders</a>
+			<a href="/account/profile">Your profile</a>
+			<hr>
+			<a href="/logout">Sign Out</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+			<img src={{url_for('static', filename='images/shoppingCart.png')}} id="cartIcon" />
+			CART {{productCountinKartForGivenUser}}
+		</a>
+	</div>
+	<div id="home">
+		<a class="link" href="/home">
+			<img src={{url_for('static', filename='images/logo.png')}} id="logoIconcart" />
+		</a>
+	</div>
+</div>
+
+	<!-- Title Page -->
+<section class="bg-title-page p-t-40 p-b-50 flex-col-c-m">
+		<h2 class="l-text2 t-center" style="color:darkgoldenrod">
+			{%if trendtype =="least" %}
+				Top 3 least selling products
+			{% else %}
+				Top 3 most selling products
+			{% endif %}
+		</h2>
+<div class="size10 trans-0-4 m-t-10 m-b-10">				<!-- Button -->
+
+					<button class="">
+						{%if trendtype =="least" %}
+							<a href="/seeTrends?trend=most">Top 3 most selling products</a>
+						{% else %}
+						<a href="/seeTrends?trend=least">Top 3 least selling products</a>
+						{% endif %}
+
+					</button>
+
+
+</div>
+
+</section>
+<div>
+{{div_placeholder}}
+</div>
+</body>
+</html>

@@ -25,7 +25,7 @@ function validateCardNumber() {
     if (/^[0-9]{16}$/.test(number)){
         return validateCVV()
      }
-    alert("Credit card number you have entered is not valid,Please enter 3-4 digits!")
+    alert("Credit card number you have entered is not valid,please enter 16 digit valid number!")
     document.getElementById("ccnum").focus();
     return (false)
 
