@@ -17,7 +17,7 @@
                 <tr>
                   <td>{{ category.category_name}}</td>
                   <td>{{ category.noOfProducts }}</td>
-                  <td><a href="{{ url_for('update_category', category_id=category.categoryid) }}" class="btn btn-primary">Edit</a></td>
+                  <td><a href="{{ url_for('category', category_id=category.categoryid) }}" class="btn btn-primary btn-sm m-1">View</a></td>
                 </tr>
               {% endfor %}
             </tbody>

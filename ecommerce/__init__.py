@@ -9,9 +9,9 @@ import logging
 
 
 ######### Enable this for debugging #########
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
-# SQLALCHEMY_TRACK_MODIFICATIONS = True
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 ######## Enable this for debugging #########
 
 app = Flask(__name__)

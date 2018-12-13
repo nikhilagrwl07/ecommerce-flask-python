@@ -13,7 +13,7 @@
               <th scope="col">Regular Price</th>
               <th scope="col">Discounted Price</th>
               <th scope="col">Quantity</th>
-              <th scope="col">Actions</th>
+              <th scope="col">View</th>
             </tr>
           </thead>
             <tbody>
@@ -21,11 +21,11 @@
                 <tr>
                   <td>{{ product.sku}}</td>
                   <td>{{ product.product_name}}</td>
-                  <td>{{ product.description}}</td>
+                  <td>{{ product.description|truncate(40)}}</td>
                   <td>{{ product.regular_price}}</td>
                   <td>{{ product.discounted_price}}</td>
                   <td>{{ product.quantity}}</td>
-                  <td><a href="{{ url_for('update_product', product_id=product.productid) }}" class="btn btn-primary">Edit</a></td>
+                  <td><a href="{{ url_for('product', product_id=product.productid) }}" class="btn btn-primary btn-sm m-1">View</a></td>
                 </tr>
               {% endfor %}
             </tbody>

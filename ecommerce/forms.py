@@ -165,7 +165,7 @@ def extractAndPersistKartDetailsUsingkwargs(productId):
 
 class addCategoryForm(FlaskForm):
     category_name = StringField('Category Name', validators=[DataRequired()])
-    submit = SubmitField('Add Category')
+    submit = SubmitField('Save')
 
 class addProductForm(FlaskForm):
     category = SelectField('Category:', coerce=int, id='select_category')
@@ -175,7 +175,7 @@ class addProductForm(FlaskForm):
     productPrice = FloatField('Product Price:', validators=[DataRequired()])
     productQuantity = IntegerField('Product Quantity:', validators=[DataRequired()])
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Add Product')
+    submit = SubmitField('Save')
 
 
 # START CART MODULE
