@@ -6,7 +6,8 @@ from email.mime.text import MIMEText
 from flask import session
 from flask import url_for, flash, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField, RadioField, FloatField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, RadioField, FloatField, SelectField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.validators import DataRequired, Length, Email
 
 from ecommerce import mysql

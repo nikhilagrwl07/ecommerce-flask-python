@@ -225,8 +225,7 @@ def update_product(product_id):
         form.productDescription.data = product.description
         form.productPrice.data = product.regular_price
         form.productQuantity.data = product.quantity
-      return render_template('addProduct.html', legend="Update Product", form=form)
-
+    return render_template('addProduct.html', legend="Update Product", form=form)
 
 @app.route("/admin/users", methods=['GET'])
 def getUsers():
