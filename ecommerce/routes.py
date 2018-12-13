@@ -247,7 +247,7 @@ def update_product(product_id):
     return redirect(url_for('root'))
 
 @app.route("/admin/users", methods=['GET'])
-def getUsers()
+def getUsers():
     if isUserAdmin():
         users = User.query.all()
         return render_template('adminUsers.html', users= users)
