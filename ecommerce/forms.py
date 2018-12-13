@@ -154,7 +154,7 @@ def extractAndPersistKartDetailsUsingkwargs(productId):
     quantity = Cart.query.with_entities(Cart.quantity).filter_by(**kwargs).first()
 
     if quantity is not None:
-        cart = Cart(userid=userId, productid=productId, quantity=qry[0][0] + 1)
+        cart = Cart(userid=userId, productid=productId, quantity=quantity[0] + 1)
     else:
         cart = Cart(userid=userId, productid=productId, quantity=1)
 

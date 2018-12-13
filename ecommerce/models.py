@@ -1,6 +1,5 @@
 from datetime import datetime
 from ecommerce import db
-from flask_login import UserMixin
 
 db.Model.metadata.reflect(db.engine)
 

@@ -2,9 +2,11 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, request
-
 from ecommerce import app
 from ecommerce.forms import *
+from plotly.offline import plot
+import plotly.graph_objs as go
+from flask import Markup
 from ecommerce.models import *
 
 @app.route("/signIn")
@@ -316,3 +318,31 @@ def createOrder():
     return render_template("OrderPage.html", email=email, username=username, ordernumber=ordernumber,
                                    address=address, fullname=fullname, phonenumber=phonenumber)
 
+
+@app.route("/seeTrends", methods=['GET', 'POST'])
+def seeTrends():
+    trendtype = str(request.args.get('trend'))
+    cur = mysql.connection.cursor()
+    if(trendtype=="least"):
+        cur.execute("SELECT ordered_product.productid, sum(ordered_product.quantity) AS TotalQuantity,product.product_name FROM \
+                       ordered_product,product where ordered_product.productid=product.productid GROUP BY productid \
+                           ORDER BY TotalQuantity ASC LIMIT 3 ")
+    else:
+        trendtype="most"
+        cur.execute("SELECT ordered_product.productid, sum(ordered_product.quantity) AS TotalQuantity,product.product_name FROM \
+                ordered_product,product where ordered_product.productid=product.productid GROUP BY productid \
+                    ORDER BY TotalQuantity DESC LIMIT 3 ")
+
+    products = cur.fetchall()
+    cur.close()
+    x = []
+    y = []
+    for item in products:
+        x.append(item['product_name'])
+        y.append(item['TotalQuantity'])
+
+    my_plot_div = plot([go.Bar(x=x, y=y)], output_type='div')
+
+    return render_template('trends.html',
+                           div_placeholder=Markup(my_plot_div),trendtype=trendtype
+                           )
