@@ -118,7 +118,7 @@ def isUserLoggedIn():
         return True
 
 
-# check if user is an admin
+# check if user is an admin.html
 def isUserAdmin():
     if isUserLoggedIn():
         # ProductCategory.query.filter_by(productid=product.productid).first()

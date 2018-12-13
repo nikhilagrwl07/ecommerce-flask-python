@@ -37,3 +37,14 @@ whole project into 3 flows-
      1.User sees current order details.
 
 **Admin Page**
+    
+    1. Admin can see a list of options available to him
+        - Categories
+        - Products
+        - Users
+    2. Categories
+        - CRUDE
+    3. Products
+        - CRUDE
+    4. Users
+        - Read (view-only)

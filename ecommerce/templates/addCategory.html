@@ -1,21 +1,26 @@
-<form action="" method="POST">
-        {{ form.hidden_tag() }}
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <form action="" method="POST">
+                {{ form.hidden_tag() }}
 
-        <div class="form-group">
-            {{ form.category_name.label }}
-            {% if form.category_name.errors %}
-                {{ form.category_name(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.category_name.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
+                <div class="form-group">
+                    {{ form.category_name.label }}
+                    {% if form.category_name.errors %}
+                        {{ form.category_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.category_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.category_name}}
+                    {% endif %}
                 </div>
-            {% else %}
-                {{ form.category_name}}
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
 
-</form>
+        </form>
+    </div>
+{% endblock content %}
