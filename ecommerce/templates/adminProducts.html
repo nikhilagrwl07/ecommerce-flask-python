@@ -25,7 +25,7 @@
                   <td>{{ product.regular_price}}</td>
                   <td>{{ product.discounted_price}}</td>
                   <td>{{ product.quantity}}</td>
-                  <td><a href="{{ url_for('update_product', product_id=product.productid) }}" class="btn btn-primary">View  / Edit</a></td>
+                  <td><a href="{{ url_for('update_product', product_id=product.productid) }}" class="btn btn-primary">Edit</a></td>
                 </tr>
               {% endfor %}
             </tbody>
