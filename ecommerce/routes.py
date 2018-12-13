@@ -1,9 +1,6 @@
-import os
-import secrets
-from PIL import Image
-from flask import render_template, url_for, flash, redirect, request, abort, session
-from ecommerce import app, mysql
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import render_template, request
+
+from ecommerce import app
 from ecommerce.forms import *
 from ecommerce.models import *
 
@@ -54,7 +51,7 @@ def root():
     loggedIn, firstName, productCountinKartForGivenUser = getLoginUserDetails()
     allProductDetails = getAllProducts()
     allProductsMassagedDetails = massageItemData(allProductDetails)
-    categoryData = getAllCategoryId()
+    categoryData = getCategoryDetails()
 
     return render_template('home.html', itemData=allProductsMassagedDetails, loggedIn=loggedIn, firstName=firstName,
                            productCountinKartForGivenUser=productCountinKartForGivenUser,
@@ -94,7 +91,12 @@ def productDescription():
 def addToCart():
     if isUserLoggedIn():
         productId = int(request.args.get('productId'))
-        extractAndPersistKartDetails(productId)
+
+        # Using Flask-SQLAlchmy SubQuery
+        extractAndPersistKartDetailsUsingSubquery(productId)
+
+        # Using Flask-SQLAlchmy normal query
+        # extractAndPersistKartDetailsUsingkwargs(productId)
         flash('Item successfully added to cart !!', 'success')
         return redirect(url_for('root'))
     else:
@@ -164,7 +166,7 @@ def save_picture(form_picture):
 @app.route("/admin/products", methods=['GET'])
 def getProducts():
     products = Product.query.all()
-    return render_template('adminProducts.html', products = products)
+    return render_template('adminProducts.html', products=products)
 
 @app.route("/admin/products/new", methods=['GET', 'POST'])
 def addProduct():
@@ -175,6 +177,7 @@ def addProduct():
         if form.image.data:
             product_icon = save_picture(form.image.data)
         product = Product(sku=form.sku.data, product_name=form.productName.data, description=form.productDescription.data, image=product_icon, quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
+
         db.session.add(product)
         db.session.commit()
         product_category = ProductCategory(categoryid=form.category.data, productid=product.productid)
@@ -189,7 +192,7 @@ def addProduct():
 def product(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template('adminViewProduct.html', product=product)
-
+  
 @app.route("/admin/product/<int:product_id>/update", methods=['GET', 'POST'])
 def update_product(product_id):
     product = Product.query.get_or_404(product_id)
@@ -222,7 +225,7 @@ def update_product(product_id):
         form.productDescription.data = product.description
         form.productPrice.data = product.regular_price
         form.productQuantity.data = product.quantity
-    return render_template('addProduct.html', legend="Update Product", form=form)
+      return render_template('addProduct.html', legend="Update Product", form=form)
 
 
 @app.route("/admin/users", methods=['GET'])
@@ -253,8 +256,10 @@ def checkoutForm():
 @app.route("/createOrder", methods=['GET', 'POST'])
 def createOrder():
     totalsum = request.args.get('total')
-    email, username,ordernumber,address,fullname,phonenumber= extractOrderdetails(request, totalsum)
+    email, username, ordernumber, address, fullname, phonenumber, provider = extractOrderdetails(request, totalsum)
     if email:
-        sendEmailconfirmation(email, username,ordernumber)
-    return render_template("OrderPage.html", email=email, username=username,ordernumber=ordernumber,address=address,fullname=fullname,phonenumber=phonenumber)
+        sendEmailconfirmation(email, username, ordernumber, phonenumber, provider)
+
+    return render_template("OrderPage.html", email=email, username=username, ordernumber=ordernumber,
+                                   address=address, fullname=fullname, phonenumber=phonenumber)
 

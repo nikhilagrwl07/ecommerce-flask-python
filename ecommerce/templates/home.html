@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Shopaholic - Shoppers Paradise</title>
+<title>StarGadgets</title>
 <link rel="stylesheet" href={{ url_for('static', filename='css/home.css') }} />
 <link rel="stylesheet" href={{ url_for('static', filename='css/topStyle.css') }} />
 </head>
@@ -33,13 +33,18 @@
 			CART {{productCountinKartForGivenUser}}
 		</a>
 	</div>
+	<div id="home">
+		<a class="link" href="/home">
+			<img src={{url_for('static', filename='images/logo.png')}} id="logoIcon" />
+		</a>
+	</div>
 </div>
 <div class="display">
 	<div class="displayCategory" >
 		<h2>Shop by Category: </h2>
 		<ul>
 			{% for row in categoryData %}
-			<li><a href="/displayCategory?categoryId={{row[0]}}">{{row[1]}}</a></li>
+			<li><a href="/displayCategory?categoryId={{row.categoryid}}">{{row.category_name}}</a></li>
 			{% endfor %}
 		</ul>
 	</div>
@@ -57,8 +62,8 @@
 			<tr id="productImage">
 				{% for row in data %}
 				<td>
-					<a href="/productDescription?productId={{row[0]}}">
-						<img src={{ url_for('static', filename='uploads/' + row[4]) }} id="itemImage" />
+					<a href="/productDescription?productId={{row.productid}}">
+						<img src={{ url_for('static', filename='uploads/' + row.image) }} id="itemImage" />
 					</a>
 				</td>
 				{% endfor %}
@@ -66,7 +71,7 @@
 			<tr id="productPrice">
 				{% for row in data %}
 				<td>
-					$ {{row[2]}}
+					$ {{row.discounted_price}}
 				</td>
 				{% endfor %}
 			</tr>

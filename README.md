@@ -9,5 +9,16 @@ whole project into 3 flows-
 5. Adding items to cart    
  
 **Flow #2 -**
+Cart Page:-
+    1.Clicks on cart
+    2.Cart details along with subtotal for each product(quantity* productprice). Also displays grand total for all products with tax            calculation.
+    3.User clicks on remove button to remove products from cart.
+    4.User clicks on proceed to checkout.
+Checkout Page:-
+     1.User enters details on the form and clicks make payment.
+     2.Email and text notifications are sent to user on payment.
+Orders Page:-
+     1.User sees current order details.
+
 
 **Flow #3 -**
