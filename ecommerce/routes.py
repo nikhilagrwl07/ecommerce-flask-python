@@ -213,10 +213,10 @@ def addProduct():
     if isUserAdmin():
         form = addProductForm()
         form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
-
+        product_icon = "" #safer way in case the image is not included in the form
         if form.validate_on_submit():
-            # if form.image.data:
-            product_icon = save_picture(form.image.data)
+            if form.image.data:
+                product_icon = save_picture(form.image.data)
             product = Product(sku=form.sku.data, product_name=form.productName.data, description=form.productDescription.data, image=product_icon, quantity=form.productQuantity.data, discounted_price=15, product_rating=0, product_review=" ", regular_price=form.productPrice.data)
 
             db.session.add(product)
