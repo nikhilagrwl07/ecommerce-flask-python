@@ -38,7 +38,7 @@ whole project into 3 flows-
 
 **Admin Page**
     
-    1. Admin can see a list of options available to him
+    1. Admin users can see a list of options available to them:
         - Categories
         - Products
         - Users

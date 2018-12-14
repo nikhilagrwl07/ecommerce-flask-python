@@ -320,7 +320,7 @@ def sendEmailconfirmation(email, username, ordernumber, phonenumber, provider):
     msg['Subject'] = "Your Order has been placed for " + username
     msg['From'] = sitemail
     msg['To'] = email
-    text = "Hello!\nThank you for shopping with us"
+    text = "Hello!\nThank you for shopping with us.Your order No is:" +str(ordernumber[0])
     html = """\
         <html>
           <head></head>
