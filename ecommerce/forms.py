@@ -174,7 +174,7 @@ class addProductForm(FlaskForm):
     productDescription = TextAreaField('Product Description:', validators=[DataRequired()])
     productPrice = FloatField('Product Price:', validators=[DataRequired()])
     productQuantity = IntegerField('Product Quantity:', validators=[DataRequired()])
-    image = FileField('Product Image', validators=[DataRequired(), FileAllowed(['jpg', 'png'])])
+    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Save')
 
 

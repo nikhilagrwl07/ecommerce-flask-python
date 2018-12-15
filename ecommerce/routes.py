@@ -160,13 +160,11 @@ def update_category(category_id):
 @app.route("/admin/category/<int:category_id>/delete", methods=['POST'])
 def delete_category(category_id):
     if isUserAdmin():
-        # category= Category.query.get_or_404(category_id)
-        # db.session.delete(category)
-        # db.session.commit()
-        cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM product_category WHERE categoryid=" + str(category_id))
-        cur.execute("DELETE FROM category WHERE categoryid=" + str(category_id))
-        cur.close()
+        ProductCategory.query.filter_by(categoryid=category_id).delete()
+        db.session.commit()
+        category= Category.query.get_or_404(category_id)
+        db.session.delete(category)
+        db.session.commit()
         flash('Your category has been deleted!', 'success')
     return redirect(url_for('getCategories'))
 
@@ -244,6 +242,8 @@ def update_product(product_id):
         form = addProductForm()
         form.category.choices = [(row.categoryid, row.category_name) for row in Category.query.all()]
         if form.validate_on_submit():
+            if form.image.data:
+                product.image = save_picture(form.image.data)
             product.product_name = form.productName.data
             product.sku = form.sku.data
             product.productDescription = form.productDescription.data
@@ -252,9 +252,6 @@ def update_product(product_id):
             product.regular_price = form.productPrice.data
             db.session.commit()
             product_category = ProductCategory.query.filter_by(productid = product.productid).first()
-            print("This is product category")
-            print(product_category)
-            print("That was product category")
             if form.category.data != product_category.categoryid:
                 new_product_category = ProductCategory(categoryid=form.category.data, productid = product.productid)
                 db.session.add(new_product_category)
@@ -276,10 +273,13 @@ def update_product(product_id):
 @app.route("/admin/product/<int:product_id>/delete", methods=['POST'])
 def delete_product(product_id):
     if isUserAdmin():
-        cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM product_category WHERE productid=" + str(product_id))
-        cur.execute("DELETE FROM product WHERE productid=" + str(product_id))
-        cur.close()
+        product_category = ProductCategory.query.filter_by(productid=product_id).first()
+        if product_category is not None:
+            db.session.delete(product_category)
+            db.session.commit()
+        product = Product.query.get_or_404(product_id)
+        db.session.delete(product)
+        db.session.commit()
         flash('Your product has been deleted!', 'success')
     return redirect(url_for('getProducts'))
 
