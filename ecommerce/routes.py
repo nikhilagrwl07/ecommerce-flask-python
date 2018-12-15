@@ -277,6 +277,8 @@ def delete_product(product_id):
         if product_category is not None:
             db.session.delete(product_category)
             db.session.commit()
+        Cart.query.filter_by(productid=product_id).delete()
+        db.session.commit()
         product = Product.query.get_or_404(product_id)
         db.session.delete(product)
         db.session.commit()
