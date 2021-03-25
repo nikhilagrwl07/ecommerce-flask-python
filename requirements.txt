@@ -10,7 +10,7 @@ Jinja2==2.11.1
 MarkupSafe==1.1.1
 mysqlclient==1.4.6
 pycparser==2.19
-PyYAML==5.3
+PyYAML==5.4
 ruamel.appconfig==0.5.4
 ruamel.std.argparse==0.8.1
 six==1.14.0
